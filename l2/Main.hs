@@ -23,7 +23,15 @@ primes = primesFrom [2..] where
     primesFrom (x:xs) = x : primesFrom (sift x xs)
     sift n xs = xs `diff` iterate (+n) 0
 
-primeFibs = intersect primes fibs
+isPrime 0 = False
+isPrime 1 = False
+isPrime n = none (\x -> n `mod` x == 0) . takeWhile (\x -> x * x <= n) $ primes
+
+none f = not . any f
+
+primeFibsSlow = intersect primes fibs
+
+primeFibs = filter isPrime fibs
 
 firstPrimeFibAbove n = head . dropWhile (<=n) $ primeFibs
 
