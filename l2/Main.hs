@@ -19,13 +19,15 @@ intersect (x:xs) (y:ys)
     | x == y = x : intersect xs ys
     | x > y  = intersect (x:xs) ys
 
-primes = primesFrom [2..] where
+primesSlow = primesFrom [2..] where
     primesFrom (x:xs) = x : primesFrom (sift x xs)
     sift n xs = xs `diff` iterate (+n) 0
 
+primes = 2 : filter isPrime [3..]
+
 isPrime 0 = False
 isPrime 1 = False
-isPrime n = none (\x -> n `mod` x == 0) . takeWhile (\x -> x * x <= n) $ primes
+isPrime n = none (`divides` n) . takeWhile (\x -> x * x <= n) $ primes
 
 none f = not . any f
 
@@ -35,5 +37,9 @@ primeFibs = filter isPrime fibs
 
 firstPrimeFibAbove n = head . dropWhile (<=n) $ primeFibs
 
-main = print $ firstPrimeFibAbove 227000
+main = print . sum . primeDivisors . (+1) . firstPrimeFibAbove $ 227000
+
+m `divides` n = n `mod` m == 0
+
+primeDivisors n = filter (`divides` n) . takeWhile (<= n) $ primes
 
