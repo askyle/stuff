@@ -1,16 +1,11 @@
 module Main where
 
-x `divides` y = y `mod` x == 0
+largestFactorFrom f n
+    | f == n         = f
+    | n `mod` f == 0 = largestFactorFrom f (n `div` f)
+    | otherwise      = largestFactorFrom (f+1) n
 
-primes = 2 : filter isPrime [3..]
-
-none p = not . any p
-
-isPrime x = none (`divides` x) . filter (\y -> y*y <= x) $ primes
-
-primeFactors x = filter (`divides` x) . takeWhile (<= x) $ primes
-
-largestPrimeFactor = last . primeFactors
+largestPrimeFactor = largestFactorFrom 2
 
 solution = largestPrimeFactor 600851475143
 
