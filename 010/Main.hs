@@ -8,7 +8,7 @@ p `divides` n = n `mod` p == 0
 
 none p = not . any p
 
-solution = primes !! 10001
+solution = sum . takeWhile (< 10) $ primes
 
 main = print solution
 
